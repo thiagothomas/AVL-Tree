@@ -1,2 +1,3 @@
-public class TesteTestado {
+public class Teste {
+    private String batata2;
 }
