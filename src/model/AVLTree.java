@@ -187,37 +187,11 @@ public class AVLTree {
         return altura(atual.getDireita().getDireita()) > altura(atual.getDireita().getEsquerda());
     }
 
-    public void imprimirPosOrdem(Node raiz) {
-        if (Objects.isNull(raiz)) {
-            return;
-        }
-
-        imprimirPosOrdem(raiz.getEsquerda());
-        imprimirPosOrdem(raiz.getDireita());
-        System.out.print(raiz.getValor() + " ");
-    }
-
-    public void imprimirEmOrdem(Node raiz) {
-        if (Objects.isNull(raiz)) {
-            return;
-        }
-
-        imprimirEmOrdem(raiz.getEsquerda());
-        System.out.print(raiz.getValor() + " ");
-        imprimirEmOrdem(raiz.getDireita());
-    }
-
-    public void imprimirPreOrdem(Node raiz) {
-        if (Objects.isNull(raiz)) {
-            return;
-        }
-
-        System.out.print(raiz.getValor() + " ");
-        imprimirPreOrdem(raiz.getEsquerda());
-        imprimirPreOrdem(raiz.getDireita());
-    }
-
     public Node getRaiz() {
         return raiz;
+    }
+
+    public int getNumElementos() {
+        return numElementos;
     }
 }
