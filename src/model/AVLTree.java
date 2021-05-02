@@ -1,15 +1,22 @@
 package model;
 
+import java.util.Objects;
+
 public class AVLTree {
 
     private Node raiz;
+    private int numElementos;
+
+    public AVLTree() {
+        this.numElementos = 0;
+    }
 
     public boolean buscar(int valor) {
         return buscar(raiz, valor);
     }
 
     private boolean buscar(Node atual, int valor) {
-        if(atual == null) {
+        if(Objects.isNull(atual)) {
             return false;
         }
 
@@ -26,6 +33,7 @@ public class AVLTree {
     public boolean inserir(int valor) {
         if(!buscar(raiz, valor)) {
             raiz = inserir(raiz, valor);
+            numElementos++;
             return true;
         } else {
             return false;
@@ -33,7 +41,7 @@ public class AVLTree {
     }
 
     private Node inserir(Node atual, int valor) {
-        if(atual == null) {
+        if(Objects.isNull(atual)) {
             return new Node(valor);
         }
 
@@ -47,8 +55,9 @@ public class AVLTree {
     }
 
     public boolean remover(int valor) {
-        if(!buscar(raiz, valor)) {
+        if(buscar(raiz, valor)) {
             raiz = remover(raiz, valor);
+            numElementos--;
             return true;
         } else {
             return false;
@@ -56,8 +65,8 @@ public class AVLTree {
     }
 
     private Node remover(Node atual, int valor) {
-        if (atual == null) {
-            return atual;
+        if (Objects.isNull(atual)) {
+            return null;
         }
 
         if(valor < atual.getValor()) {
@@ -65,24 +74,24 @@ public class AVLTree {
         } else if(valor > atual.getValor()) {
             atual.setDireita(remover(atual.getDireita(), valor));
         } else {
-            if(atual.getEsquerda() == null) {
+            if(Objects.isNull(atual.getEsquerda())) {
                 atual = atual.getDireita();
-            } else if(atual.getDireita() == null) {
+            } else if(Objects.isNull(atual.getDireita())) {
                 atual = atual.getEsquerda();
             } else {
-                if (atual.getEsquerda().getAltura() > atual.getDireita().getAltura()) {
-                    Node maiorValorEsquerda = maiorValorNaSubarvore(atual.getDireita());
-                    atual.setValor(maiorValorEsquerda.getValor());
-                    atual.setEsquerda(remover(atual.getEsquerda(), maiorValorEsquerda.getValor()));
-                } else {
+                if (atual.getDireita().getAltura() > atual.getEsquerda().getAltura()) {
                     Node menorValorDireita = menorValorNaSubarvore(atual.getDireita());
                     atual.setValor(menorValorDireita.getValor());
                     atual.setDireita(remover(atual.getDireita(), menorValorDireita.getValor()));
+                } else {
+                    Node maiorValorEsquerda = maiorValorNaSubarvore(atual.getEsquerda());
+                    atual.setValor(maiorValorEsquerda.getValor());
+                    atual.setEsquerda(remover(atual.getEsquerda(), maiorValorEsquerda.getValor()));
                 }
             }
         }
 
-        if(atual != null) {
+        if(!Objects.isNull(atual)) {
             atual = balancear(atual);
         }
 
@@ -139,7 +148,7 @@ public class AVLTree {
     }
 
     private Node menorValorNaSubarvore(Node atual) {
-        while(atual.getEsquerda() != null) {
+        while(!Objects.isNull(atual.getEsquerda())) {
             atual = atual.getEsquerda();
         }
 
@@ -147,7 +156,7 @@ public class AVLTree {
     }
 
     private Node maiorValorNaSubarvore(Node atual) {
-        while(atual.getDireita() != null) {
+        while(!Objects.isNull(atual.getDireita())) {
             atual = atual.getDireita();
         }
 
@@ -155,7 +164,7 @@ public class AVLTree {
     }
 
     private int fatorBalanceamento(Node atual) {
-        if(atual == null) {
+        if(Objects.isNull(atual)) {
             return 0;
         } else {
             return altura(atual.getEsquerda()) - altura(atual.getDireita());
@@ -163,7 +172,7 @@ public class AVLTree {
     }
 
     private int altura(Node atual) {
-        if(atual == null) {
+        if(Objects.isNull(atual)) {
             return -1;
         } else {
             return atual.getAltura();
@@ -176,5 +185,39 @@ public class AVLTree {
 
     private boolean rotacaoSimplesEsquerda(Node atual) {
         return altura(atual.getDireita().getDireita()) > altura(atual.getDireita().getEsquerda());
+    }
+
+    public void imprimirPosOrdem(Node raiz) {
+        if (Objects.isNull(raiz)) {
+            return;
+        }
+
+        imprimirPosOrdem(raiz.getEsquerda());
+        imprimirPosOrdem(raiz.getDireita());
+        System.out.print(raiz.getValor() + " ");
+    }
+
+    public void imprimirEmOrdem(Node raiz) {
+        if (Objects.isNull(raiz)) {
+            return;
+        }
+
+        imprimirEmOrdem(raiz.getEsquerda());
+        System.out.print(raiz.getValor() + " ");
+        imprimirEmOrdem(raiz.getDireita());
+    }
+
+    public void imprimirPreOrdem(Node raiz) {
+        if (Objects.isNull(raiz)) {
+            return;
+        }
+
+        System.out.print(raiz.getValor() + " ");
+        imprimirPreOrdem(raiz.getEsquerda());
+        imprimirPreOrdem(raiz.getDireita());
+    }
+
+    public Node getRaiz() {
+        return raiz;
     }
 }
