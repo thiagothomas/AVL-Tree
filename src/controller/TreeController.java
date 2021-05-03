@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 
 public class TreeController {
 
+    private static final String DEFAULT_MESSAGE = "* A ÁRVORE ESTÁ VAZIA!";
+
     public static void main(String[] args) {
         InputStream is = System.in;
         InputStreamReader ir = new InputStreamReader(is);
@@ -42,25 +44,25 @@ public class TreeController {
                         break;
                     case 4:
                         if (avlTree.getNumElementos() > 0) TreeViewer.imprimeArvore(avlTree);
-                        else System.out.println("* A ÁRVORE ESTÁ VAZIA!");
+                        else System.out.println(DEFAULT_MESSAGE);
                         break;
                     case 5:
                         if(avlTree.getNumElementos() > 0) {
                             System.out.print("ARVORE EM ORDEM: ");
                             TreeViewer.imprimirEmOrdem(avlTree.getRaiz());
-                        } else System.out.println("* A ÁRVORE ESTÁ VAZIA!");
+                        } else System.out.println(DEFAULT_MESSAGE);
                         break;
                     case 6:
                         if(avlTree.getNumElementos() > 0) {
                             System.out.print("ARVORE PRE ORDEM: ");
                             TreeViewer.imprimirPreOrdem(avlTree.getRaiz());
-                        } else System.out.println("* A ÁRVORE ESTÁ VAZIA!");
+                        } else System.out.println(DEFAULT_MESSAGE);
                         break;
                     case 7:
                         if(avlTree.getNumElementos() > 0) {
                             System.out.print("AROVRE POS ORDEM: ");
                             TreeViewer.imprimirPosOrdem(avlTree.getRaiz());
-                        } else System.out.println("* A ÁRVORE ESTÁ VAZIA!");
+                        } else System.out.println(DEFAULT_MESSAGE);
                         break;
                     case 8:
                         System.out.println("Muito Obrigado! Encerrando o programa.");

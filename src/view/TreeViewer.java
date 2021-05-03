@@ -7,6 +7,10 @@ import java.util.Objects;
 
 public class TreeViewer {
 
+    private TreeViewer(){
+
+    }
+
     public static void imprimeOpcoes(){
         System.out.println("------------- ESCOLHA A OPERACAO DESEJADA -------------");
         System.out.println(" * [1] - Inserir elemento");
