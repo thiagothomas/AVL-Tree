@@ -7,27 +7,17 @@ import java.util.Objects;
 
 public class TreeViewer {
 
-    public static void main(String[] args) {
-        AVLTree avlTree = new AVLTree();
-
-        avlTree.inserir(1);
-        avlTree.inserir(2);
-        avlTree.inserir(3);
-        avlTree.inserir(4);
-        avlTree.inserir(5);
-        avlTree.inserir(6);
-        avlTree.inserir(7);
-        avlTree.inserir(8);
-        avlTree.inserir(9);
-        avlTree.inserir(10);
-        avlTree.inserir(11);
-        avlTree.inserir(12);
-        avlTree.inserir(13);
-        avlTree.inserir(14);
-        avlTree.inserir(15);
-
-        imprimeArvore(avlTree);
-
+    public static void imprimeOpcoes(){
+        System.out.println("------------- ESCOLHA A OPERACAO DESEJADA -------------");
+        System.out.println(" * [1] - Inserir elemento");
+        System.out.println(" * [2] - Buscar elemento");
+        System.out.println(" * [3] - Remover elemento");
+        System.out.println(" * [4] - Imprimir toda árvore");
+        System.out.println(" * [5] - Imprimir em ordem");
+        System.out.println(" * [6] - Imprimir em Pré-ordem");
+        System.out.println(" * [7] - Imprimir em Pós-ordem");
+        System.out.println(" * [8] - Sair");
+        System.out.println("-------------------------------------------------------");
     }
 
     public static void imprimeArvore(AVLTree avlTree) {

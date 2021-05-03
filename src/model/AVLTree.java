@@ -12,7 +12,14 @@ public class AVLTree {
     }
 
     public boolean buscar(int valor) {
-        return buscar(raiz, valor);
+        if(buscar(raiz, valor)) {
+            System.out.println("* ELEMNTO SE ENCONTRA NA ÁRVORE!");
+            return true;
+        } else {
+            if(numElementos == 0) System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
+            else System.out.println("* ELEMENTO NÃO SE ENCONTRA NA ÁRVORE!");
+            return false;
+        }
     }
 
     private boolean buscar(Node atual, int valor) {
@@ -34,8 +41,10 @@ public class AVLTree {
         if(!buscar(raiz, valor)) {
             raiz = inserir(raiz, valor);
             numElementos++;
+            System.out.println("* ELEMENTO " + valor + " INSERIDO!");
             return true;
         } else {
+            System.out.println("* ELEMENTO JÁ EXISTE NA ÁRVORE!");
             return false;
         }
     }
@@ -58,8 +67,11 @@ public class AVLTree {
         if(buscar(raiz, valor)) {
             raiz = remover(raiz, valor);
             numElementos--;
+            System.out.println("* ELEMENTO REMOVIDO!");
             return true;
         } else {
+            if(numElementos == 0) System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
+            else System.out.println("* ELEMENTO NÃO SE ENCONTRA NA ÁRVORE!");
             return false;
         }
     }
