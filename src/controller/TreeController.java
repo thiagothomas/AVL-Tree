@@ -33,14 +33,17 @@ public class TreeController {
                     case 1:
                         System.out.print("DIGITE O NUMERO INTEIRO QUE DESEJA INSERIR: ");
                         avlTree.inserir(Integer.parseInt(br.readLine()));
+                        TreeViewer.imprimeArvore(avlTree);
                         break;
                     case 2:
                         System.out.print("DIGITE O NUMERO INTEIRO QUE DESEJA BUSCAR: ");
                         avlTree.buscar(Integer.parseInt(br.readLine()));
+                        TreeViewer.imprimeArvore(avlTree);
                         break;
                     case 3:
                         System.out.print("DIGITE O NUMERO INTEIRO QUE DESEJA REMOVER: ");
                         avlTree.remover(Integer.parseInt(br.readLine()));
+                        TreeViewer.imprimeArvore(avlTree);
                         break;
                     case 4:
                         if (avlTree.getNumElementos() > 0) TreeViewer.imprimeArvore(avlTree);
@@ -72,7 +75,6 @@ public class TreeController {
                         break;
                 }
                 System.out.println();
-                TreeViewer.imprimeArvore(avlTree);
             } catch (IOException e) {
                 System.out.println("Erro na Leitura!");
             } catch (NumberFormatException e) {

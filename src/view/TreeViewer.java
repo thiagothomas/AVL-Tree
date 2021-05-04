@@ -25,7 +25,7 @@ public class TreeViewer {
     }
 
     public static void imprimeArvore(AVLTree avlTree) {
-        imprimeArovre(avlTree.getRaiz(), 0, 5, "├ ");
+        imprimeArovre(avlTree.getRaiz(), 0, 10, "├ ");
     }
 
     private static void imprimeArovre(Node raiz, int espacoAtual, int incrementador, String pos) {

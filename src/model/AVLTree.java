@@ -11,41 +11,43 @@ public class AVLTree {
         this.numElementos = 0;
     }
 
-    public boolean buscar(int valor) {
-        if(buscar(raiz, valor)) {
-            System.out.println("* ELEMNTO SE ENCONTRA NA ÁRVORE!");
-            return true;
+    public void buscar(int valor) {
+        if(numElementos == 0) {
+            System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
+            return;
+        }
+        System.out.print("* NODOS CONSULTADOS: ");
+        if(buscar(raiz, valor, true)) {
+            System.out.println("\n* ELEMENTO " + valor + " SE ENCONTRA NA ÁRVORE!");
         } else {
-            if(numElementos == 0) System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
-            else System.out.println("* ELEMENTO NÃO SE ENCONTRA NA ÁRVORE!");
-            return false;
+            System.out.println("\n* ELEMENTO " + valor + " NÃO SE ENCONTRA NA ÁRVORE!");
         }
     }
 
-    private boolean buscar(Node atual, int valor) {
+    private boolean buscar(Node atual, int valor, boolean imprimir) {
         if(Objects.isNull(atual)) {
             return false;
         }
 
+        if(imprimir) System.out.print(atual.getValor() + " ");
+
         if(valor < atual.getValor()) {
-            return buscar(atual.getEsquerda(), valor);
+            return buscar(atual.getEsquerda(), valor, imprimir);
         }
         if(valor > atual.getValor()) {
-            return buscar(atual.getDireita(), valor);
+            return buscar(atual.getDireita(), valor, imprimir);
         }
 
         return true;
     }
 
-    public boolean inserir(int valor) {
-        if(!buscar(raiz, valor)) {
+    public void inserir(int valor) {
+        if(!buscar(raiz, valor, false)) {
             raiz = inserir(raiz, valor);
             numElementos++;
             System.out.println("* ELEMENTO " + valor + " INSERIDO!");
-            return true;
         } else {
             System.out.println("* ELEMENTO JÁ EXISTE NA ÁRVORE!");
-            return false;
         }
     }
 
@@ -63,16 +65,14 @@ public class AVLTree {
         return balancear(atual);
     }
 
-    public boolean remover(int valor) {
-        if(buscar(raiz, valor)) {
+    public void remover(int valor) {
+        if(buscar(raiz, valor, false)) {
             raiz = remover(raiz, valor);
             numElementos--;
             System.out.println("* ELEMENTO REMOVIDO!");
-            return true;
         } else {
             if(numElementos == 0) System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
             else System.out.println("* ELEMENTO NÃO SE ENCONTRA NA ÁRVORE!");
-            return false;
         }
     }
 
