@@ -28,6 +28,7 @@ public class TreeViewer {
         imprimeArovre(avlTree.getRaiz(), 0, 10, "├ ");
     }
 
+    // Codigo baseado no video https://www.youtube.com/watch?v=eY3SZLGCK2E
     private static void imprimeArovre(Node raiz, int espacoAtual, int incrementador, String pos) {
         if(Objects.isNull(raiz)) {
             return;
