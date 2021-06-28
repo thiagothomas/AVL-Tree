@@ -1,17 +1,17 @@
 package model;
 
-public class Node {
+public class Node<E> {
 
-    private Node esquerda;
-    private Node direita;
-    private int valor;
+    private Node<E> esquerda;
+    private Node<E> direita;
+    private Dado<E> dado;
     private int altura;
 
-    public Node(int valor) {
-        this.valor = valor;
+    public Node(Dado<E> dado) {
+        this.dado = dado;
     }
 
-    public Node getEsquerda() {
+    public Node<E> getEsquerda() {
         return esquerda;
     }
 
@@ -19,7 +19,7 @@ public class Node {
         this.esquerda = esquerda;
     }
 
-    public Node getDireita() {
+    public Node<E> getDireita() {
         return direita;
     }
 
@@ -27,12 +27,8 @@ public class Node {
         this.direita = direita;
     }
 
-    public int getValor() {
-        return valor;
-    }
-
-    public void setValor(int valor) {
-        this.valor = valor;
+    public Dado<E> getDado() {
+        return dado;
     }
 
     public int getAltura() {

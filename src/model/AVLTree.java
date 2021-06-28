@@ -1,62 +1,51 @@
 package model;
 
-import java.util.Objects;
+import java.util.*;
 
-public class AVLTree {
+public class AVLTree<E> {
 
-    private Node raiz;
+    private Node<E> raiz;
     private int numElementos;
 
     public AVLTree() {
         this.numElementos = 0;
     }
 
-    public void buscar(int valor) {
-        if(numElementos == 0) {
-            System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
-            return;
-        }
-        System.out.print("* NODOS CONSULTADOS: ");
-        if(buscar(raiz, valor, true)) {
-            System.out.println("\n* ELEMENTO " + valor + " SE ENCONTRA NA ÁRVORE!");
-        } else {
-            System.out.println("\n* ELEMENTO " + valor + " NÃO SE ENCONTRA NA ÁRVORE!");
-        }
-    }
-
-    private boolean buscar(Node atual, int valor, boolean imprimir) {
+    private boolean buscar(Node<E> atual, Dado<E> valor) {
         if(Objects.isNull(atual)) {
             return false;
         }
 
-        if(imprimir) System.out.print(atual.getValor() + " ");
-
-        if(valor < atual.getValor()) {
-            return buscar(atual.getEsquerda(), valor, imprimir);
-        }
-        if(valor > atual.getValor()) {
-            return buscar(atual.getDireita(), valor, imprimir);
+        if(valor.beforeValue(atual.getDado())) {
+            return buscar(atual.getEsquerda(), valor);
         }
 
-        return true;
+        if(valor.afterValue(atual.getDado())) {
+            return buscar(atual.getDireita(), valor);
+        }
+
+        // caso chegue aqui é por que o valor existe, mas apenas retorna true para cpf, caso seja data ou nome pode adicionar
+        return !(valor.getDadoPessoa() instanceof String) && !(valor.getDadoPessoa() instanceof Date);
     }
 
-    public void inserir(int valor) {
-        if(!buscar(raiz, valor, false)) {
+    public void inserir(Dado<E> valor) {
+        if(!buscar(raiz, valor)) {
             raiz = inserir(raiz, valor);
             numElementos++;
-            System.out.println("* ELEMENTO " + valor + " INSERIDO!");
-        } else {
-            System.out.println("* ELEMENTO JÁ EXISTE NA ÁRVORE!");
         }
     }
 
-    private Node inserir(Node atual, int valor) {
+    private Node<E> inserir(Node<E> atual, Dado<E> valor) {
         if(Objects.isNull(atual)) {
-            return new Node(valor);
+            return new Node<>(valor);
         }
 
-        if(valor < atual.getValor()) {
+        if(atual.getDado().getDadoPessoa().equals(valor.getDadoPessoa())) {
+            atual.getDado().getIndicesComMesmoDado().add(valor.getIndicesComMesmoDado().get(0));
+            return balancear(atual);
+        }
+
+        if(valor.beforeValue(atual.getDado())) {
             atual.setEsquerda(inserir(atual.getEsquerda(), valor));
         } else {
             atual.setDireita(inserir(atual.getDireita(), valor));
@@ -65,52 +54,7 @@ public class AVLTree {
         return balancear(atual);
     }
 
-    public void remover(int valor) {
-        if(buscar(raiz, valor, false)) {
-            raiz = remover(raiz, valor);
-            numElementos--;
-            System.out.println("* ELEMENTO REMOVIDO!");
-        } else {
-            if(numElementos == 0) System.out.println("* NÃO HÁ ELEMENTOS NA ÁRVORE!");
-            else System.out.println("* ELEMENTO NÃO SE ENCONTRA NA ÁRVORE!");
-        }
-    }
-
-    private Node remover(Node atual, int valor) {
-        if (Objects.isNull(atual)) {
-            return null;
-        }
-
-        if(valor < atual.getValor()) {
-            atual.setEsquerda(remover(atual.getEsquerda(), valor));
-        } else if(valor > atual.getValor()) {
-            atual.setDireita(remover(atual.getDireita(), valor));
-        } else {
-            if(Objects.isNull(atual.getEsquerda())) {
-                atual = atual.getDireita();
-            } else if(Objects.isNull(atual.getDireita())) {
-                atual = atual.getEsquerda();
-            } else {
-                if (atual.getDireita().getAltura() > atual.getEsquerda().getAltura()) {
-                    Node menorValorDireita = menorValorNaSubarvore(atual.getDireita());
-                    atual.setValor(menorValorDireita.getValor());
-                    atual.setDireita(remover(atual.getDireita(), menorValorDireita.getValor()));
-                } else {
-                    Node maiorValorEsquerda = maiorValorNaSubarvore(atual.getEsquerda());
-                    atual.setValor(maiorValorEsquerda.getValor());
-                    atual.setEsquerda(remover(atual.getEsquerda(), maiorValorEsquerda.getValor()));
-                }
-            }
-        }
-
-        if(!Objects.isNull(atual)) {
-            atual = balancear(atual);
-        }
-
-        return atual;
-    }
-
-    private Node balancear(Node atual) {
+    private Node<E> balancear(Node<E> atual) {
         atualizar(atual);
 
         if(fatorBalanceamento(atual) > 1) {
@@ -128,8 +72,8 @@ public class AVLTree {
         return atual;
     }
 
-    private Node rotacaoDireita(Node atual) {
-        Node pai = atual.getEsquerda();
+    private Node<E> rotacaoDireita(Node<E> atual) {
+        Node<E> pai = atual.getEsquerda();
 
         atual.setEsquerda(pai.getDireita());
         pai.setDireita(atual);
@@ -140,8 +84,8 @@ public class AVLTree {
         return pai;
     }
 
-    private Node rotacaoEsquerda(Node atual) {
-        Node pai = atual.getDireita();
+    private Node<E> rotacaoEsquerda(Node<E> atual) {
+        Node<E> pai = atual.getDireita();
 
         atual.setDireita(pai.getEsquerda());
         pai.setEsquerda(atual);
@@ -152,30 +96,14 @@ public class AVLTree {
         return pai;
     }
 
-    private void atualizar(Node atual) {
+    private void atualizar(Node<E> atual) {
         int alturaEsquerda = altura(atual.getEsquerda());
         int alturaDireita = altura(atual.getDireita());
 
         atual.setAltura(1 + Math.max(alturaEsquerda, alturaDireita));
     }
 
-    private Node menorValorNaSubarvore(Node atual) {
-        while(!Objects.isNull(atual.getEsquerda())) {
-            atual = atual.getEsquerda();
-        }
-
-        return atual;
-    }
-
-    private Node maiorValorNaSubarvore(Node atual) {
-        while(!Objects.isNull(atual.getDireita())) {
-            atual = atual.getDireita();
-        }
-
-        return atual;
-    }
-
-    private int fatorBalanceamento(Node atual) {
+    private int fatorBalanceamento(Node<E> atual) {
         if(Objects.isNull(atual)) {
             return 0;
         } else {
@@ -183,7 +111,7 @@ public class AVLTree {
         }
     }
 
-    private int altura(Node atual) {
+    private int altura(Node<E> atual) {
         if(Objects.isNull(atual)) {
             return -1;
         } else {
@@ -191,19 +119,73 @@ public class AVLTree {
         }
     }
 
-    private boolean rotacaoSimplesDireita(Node atual) {
+    private boolean rotacaoSimplesDireita(Node<E> atual) {
         return altura(atual.getEsquerda().getEsquerda()) > altura(atual.getEsquerda().getDireita());
     }
 
-    private boolean rotacaoSimplesEsquerda(Node atual) {
+    private boolean rotacaoSimplesEsquerda(Node<E> atual) {
         return altura(atual.getDireita().getDireita()) > altura(atual.getDireita().getEsquerda());
     }
 
-    public Node getRaiz() {
+    public Node<E> getRaiz() {
         return raiz;
     }
 
-    public int getNumElementos() {
-        return numElementos;
+    public List<Integer> getIndexCPF(Node<Long> atual, long valor) {
+        if(Objects.isNull(atual)) {
+            return Collections.emptyList();
+        }
+
+        if(valor < (atual.getDado().getDadoPessoa())) {
+            return getIndexCPF(atual.getEsquerda(), valor);
+        }
+
+        if(valor > (atual.getDado().getDadoPessoa())) {
+            return getIndexCPF(atual.getDireita(), valor);
+        }
+
+        return atual.getDado().getIndicesComMesmoDado();
     }
+
+    public List<Integer> getIndexesFromDateInterval(Node<Date> atual, Date initialDate, Date finalDate, List<Integer> indices) {
+        if(Objects.isNull(atual)) {
+            return Collections.emptyList();
+        }
+
+        Date data = atual.getDado().getDadoPessoa();
+
+        if(data.after(initialDate)) {
+            getIndexesFromDateInterval(atual.getEsquerda(), initialDate, finalDate, indices);
+        }
+        if(data.before(finalDate)) {
+            getIndexesFromDateInterval(atual.getDireita(), initialDate, finalDate, indices);
+        }
+
+        if(data.after(initialDate) && data.before(finalDate)) {
+            indices.addAll(atual.getDado().getIndicesComMesmoDado());
+        }
+
+        return indices;
+    }
+
+    public List<Integer> getIndexesFromNamesStartingWith(Node<String> atual, String nameFragment, List<Integer> indices) {
+        if(Objects.isNull(atual)) {
+            return Collections.emptyList();
+        }
+
+        if(nameFragment.toUpperCase().compareTo(String.valueOf(atual.getDado().getDadoPessoa()).toUpperCase().substring(0, nameFragment.length())) <= 0) {
+            getIndexesFromNamesStartingWith(atual.getEsquerda(), nameFragment, indices);
+        }
+
+        if(nameFragment.toUpperCase().compareTo(String.valueOf(atual.getDado().getDadoPessoa()).toUpperCase().substring(0, nameFragment.length())) >= 0) {
+            getIndexesFromNamesStartingWith(atual.getDireita(), nameFragment, indices);
+        }
+
+        if(String.valueOf(atual.getDado().getDadoPessoa()).toUpperCase().startsWith(nameFragment.toUpperCase())) {
+            indices.addAll(atual.getDado().getIndicesComMesmoDado());
+        }
+
+        return indices;
+    }
+
 }
